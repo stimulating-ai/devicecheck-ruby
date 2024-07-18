@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata = {
     'bug_tracker_uri' => 'https://github.com/catawiki/devicecheck-ruby/issues',
-    'changelog_uri' => 'https://github.com/catawiki/devicecheck-ruby/CHANGELOG.md',
+    'changelog_uri' => 'https://github.com/catawiki/devicecheck-ruby/blob/main/CHANGELOG.md',
     'documentation_uri' => 'https://rubydoc.info/github/catawiki/devicecheck-ruby',
     'source_code_uri' => 'https://github.com/catawiki/devicecheck-ruby',
     'rubygems_mfa_required' => 'true'
