@@ -28,19 +28,17 @@ module Devicecheck
     PRODUCTION_URL = 'https://api.devicecheck.apple.com/v1'.freeze
     DEVELOPMENT_URL = 'https://api.development.devicecheck.apple.com/v1'.freeze
 
-    attr_reader :team_id, :key_id, :private_key, :environment
+    attr_reader :team_id, :key_id, :private_key
 
     # Initialize the DeviceCheck bits client
     #
     # @param team_id [String] Your Apple Developer Team ID
     # @param key_id [String] The key ID from Apple Developer Portal
     # @param private_key [String, OpenSSL::PKey::EC] The private key (PEM string, base64-encoded PEM, or EC key object)
-    # @param environment [Symbol] :production or :development
-    def initialize(team_id:, key_id:, private_key:, environment: :production)
+    def initialize(team_id:, key_id:, private_key:)
       @team_id = team_id
       @key_id = key_id
       @private_key = parse_private_key(private_key)
-      @environment = environment
     end
 
     # Query the current bit values for a device
@@ -135,12 +133,8 @@ module Devicecheck
       JWT.encode(claims, private_key, 'ES256', headers)
     end
 
-    def base_url
-      environment == :production ? PRODUCTION_URL : DEVELOPMENT_URL
-    end
-
     def make_request(endpoint, payload)
-      uri = URI("#{base_url}#{endpoint}")
+      uri = URI("#{PRODUCTION_URL}#{endpoint}")
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       http.read_timeout = 30
