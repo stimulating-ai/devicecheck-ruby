@@ -98,7 +98,7 @@ client = Devicecheck::BitsClient.new(
   team_id: ENV['APPLE_TEAM_ID'],
   key_id: ENV['DEVICECHECK_KEY_ID'],
   private_key: ENV['DEVICECHECK_KEY_B64'], # Base64-encoded .p8 key
-  environment: :production
+  environment: :production  # or :development for testing
 )
 ```
 

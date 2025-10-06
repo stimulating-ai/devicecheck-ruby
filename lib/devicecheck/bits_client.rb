@@ -157,14 +157,35 @@ module Devicecheck
     def parse_response(response)
       return {} if response.body.nil? || response.body.empty?
 
+      # Check if response is successful before parsing
+      if !response.is_a?(Net::HTTPSuccess)
+        handle_error_response(response)
+      end
+
+      # Handle "Failed to find bit state" response - this occurs when bits haven't been set yet
+      if response.body == "Failed to find bit state"
+        return { bit0: false, bit1: false, last_update_time: nil }
+      end
+
       JSON.parse(response.body, symbolize_names: true)
     rescue JSON::ParserError => e
-      raise RuntimeError, "Failed to parse response: #{e.message}"
+      # If we get a non-JSON response, include the actual response body in the error
+      raise RuntimeError, "Invalid JSON response from DeviceCheck API. Response body: #{response.body[0..200]}"
     end
 
     def handle_error_response(response)
-      error_body = JSON.parse(response.body, symbolize_names: true) rescue {}
-      error_message = error_body[:message] || response.message
+      # Try to parse JSON error response, but handle plain text responses too
+      error_message = if response.body && !response.body.empty?
+        begin
+          error_body = JSON.parse(response.body, symbolize_names: true)
+          error_body[:message] || error_body[:reason] || response.body
+        rescue JSON::ParserError
+          # Response body is not JSON, use it as-is
+          response.body[0..200] # Limit length for error message
+        end
+      else
+        response.message
+      end
 
       case response.code.to_i
       when 400
