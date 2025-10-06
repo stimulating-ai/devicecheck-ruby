@@ -81,3 +81,43 @@ assertion.assert(client_data:,
 ```
 
 If the assertion is valid, the function will return the count of assertions so far -- this must be stored associated with the app.  Later invocations of this method must provide the current count.
+
+### DeviceCheck Bits API
+
+The DeviceCheck Bits API allows you to set and query 2 bits of information per device that persist across app reinstalls. This is useful for:
+
+- Tracking whether a device has used a free trial
+- Managing promotional offers
+- Device fraud scoring
+- Limited-use features
+
+Initialize the bits client with your Apple Developer credentials:
+
+```ruby
+client = Devicecheck::BitsClient.new(
+  team_id: ENV['APPLE_TEAM_ID'],
+  bundle_id: ENV['APP_BUNDLE_ID'],
+  key_id: ENV['DEVICECHECK_KEY_ID'],
+  private_key: ENV['DEVICECHECK_KEY_B64'], # Base64-encoded .p8 key
+  environment: :production
+)
+```
+
+Query device bits:
+
+```ruby
+response = client.query_bits(device_token: device_token)
+# => { bit0: false, bit1: true, last_update_time: "2024-01-15" }
+```
+
+Update device bits:
+
+```ruby
+client.update_bits(
+  device_token: device_token,
+  bit0: true,   # Set bit 0
+  bit1: false   # Set bit 1
+)
+```
+
+For comprehensive usage examples including free trial management, promotional offers, fraud detection, Rails integration, and more, see [DEVICECHECK_BITS_USAGE.md](DEVICECHECK_BITS_USAGE.md).

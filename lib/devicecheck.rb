@@ -25,6 +25,7 @@ require_relative 'devicecheck/data/authenticator_data'
 require_relative 'devicecheck/validators/certificate_chain_validator'
 require_relative 'devicecheck/attestation'
 require_relative 'devicecheck/assertion'
+require_relative 'devicecheck/bits_client'
 
 # {include:file:README.md}
 module Devicecheck
