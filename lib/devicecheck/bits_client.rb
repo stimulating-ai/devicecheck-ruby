@@ -28,18 +28,16 @@ module Devicecheck
     PRODUCTION_URL = 'https://api.devicecheck.apple.com/v1'.freeze
     DEVELOPMENT_URL = 'https://api.development.devicecheck.apple.com/v1'.freeze
 
-    attr_reader :team_id, :bundle_id, :key_id, :private_key, :environment
+    attr_reader :team_id, :key_id, :private_key, :environment
 
     # Initialize the DeviceCheck bits client
     #
     # @param team_id [String] Your Apple Developer Team ID
-    # @param bundle_id [String] Your app's bundle identifier
     # @param key_id [String] The key ID from Apple Developer Portal
     # @param private_key [String, OpenSSL::PKey::EC] The private key (PEM string, base64-encoded PEM, or EC key object)
     # @param environment [Symbol] :production or :development
-    def initialize(team_id:, bundle_id:, key_id:, private_key:, environment: :production)
+    def initialize(team_id:, key_id:, private_key:, environment: :production)
       @team_id = team_id
-      @bundle_id = bundle_id
       @key_id = key_id
       @private_key = parse_private_key(private_key)
       @environment = environment
